@@ -12,7 +12,7 @@ LED_value = [11, 13, 15]
 LED_accuracy = 32
 btn_submit = 16
 btn_increase = 18
-buzzer = None
+buzzer = None #pin 33
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
 
@@ -31,6 +31,7 @@ def welcome():
 
 # Print the game menu
 def menu():
+
     global end_of_game
     option = input("Select an option:   H - View High Scores     P - Play Game       Q - Quit\n")
     option = option.upper()
@@ -64,18 +65,39 @@ def display_scores(count, raw_data):
 # Setup Pins
 def setup():
     # Setup board mode
-    # Setup regular GPIO
+    GPIO.setmode(GPIO.BOARD)
+
+    #setp regular GPIO
+    GPIO.setup(LED_value[0], GPIO.OUT)
+    GPIO.setup(LED_value[1], GPIO.OUT)
+    GPIO.setup(LED_value[2], GPIO.OUT)
+    GPIO.setup(LED_accuracy, GPIO.OUT)
+    GPIO.setup(33, GPIO.OUT)
+    
+    GPIO.setup(btn_submit, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(btn_increase, GPIO.IN,pull_up_down = GPIO.PUD_UP)
+
     # Setup PWM channels
+    LED_red = GPIO.PWM(LED_accuracy, 1000)
+    LED_red.start(50)
+
+    Buzzer_pwm = GPIO.PWM(33, 1000)
+    Buzzer_pwm.start(50)
+
     # Setup debouncing and callbacks
+    GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback = btn_guess_pressed(btn_submit), bouncetime = 200)
+    GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback = btn_increase_pressed(btn_increase), bouncetime = 200)
     pass
 
 
 # Load high scores
 def fetch_scores():
     # get however many scores there are
-    score_count = None
+    score_count = char(len(eeprom.read_byte(0))
+
     # Get the scores
-    
+    for i in range(1,3,1):
+	scores = char(eeprom.readblock(i,4))
     # convert the codes back to ascii
     
     # return back the results
@@ -85,6 +107,8 @@ def fetch_scores():
 # Save high scores
 def save_scores():
     # fetch scores
+    x = fetch_scores();
+    
     # include new score
     # sort
     # update total amount of scores
@@ -141,6 +165,7 @@ def trigger_buzzer():
 
 
 if __name__ == "__main__":
+   #eeprom.populate_mock_scores()
     try:
         # Call setup function
         setup()
