@@ -140,17 +140,17 @@ def btn_increase_pressed(channel):
                        
     # Increase the value shown on the LEDs
     if store[7] == 1:
-        GPIO.output(11, TRUE)
+        GPIO.output(11, True)
     else:  
         GPIO.output(11, False) 
                        
     if store[6] == 1:
-        GPIO.output(13, TRUE)
+        GPIO.output(13, True)
     else:  
         GPIO.output(13, False) 
                        
     if store[5] == 1:
-        GPIO.output(15, TRUE)
+        GPIO.output(15, True)
     else:  
         GPIO.output(15, False)                       
    
@@ -161,14 +161,23 @@ def btn_increase_pressed(channel):
 # Guess button
 def btn_guess_pressed(channel):
     # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen.
-		       
-    if 
+    ####################		       
     	GPIO.cleanup()
    	menu()
 		       
-    # Compare the actual value with the user value displayed on the LEDs
+    # Compare the actual value with the user value displayed on the LEDs		       
+    while(1):
+    	if GPIO.input(btn_submit) === 0:
+		if count!= generate_number():
+			accuracy_leds()       
+    			sleep(0.1)
+		else:
+			GPIO.output(LED_accuracy, False)       
+		        sleep(0.1)
+    
 		       
-    #LED_red.start(50)		       
+    #LED_red.start(50)
+		       
     # Change the PWM LED
     # if it's close enough, adjust the buzzer
     # if it's an exact guess:
@@ -184,9 +193,18 @@ def btn_guess_pressed(channel):
 # LED Brightness
 def accuracy_leds():
     # Set the brightness of the LED based on how close the guess is to the answer
-    # - The % brightness should be directly proportional to the % "closeness"
-    # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%
-    # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%
+    brightness = 0
+    if count>generate_number():
+    # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%			       
+    	brightness =((8-count)/(8-generate_number()))*100
+	LED_red.start(50)	       
+	LED_red.ChangeDutyCycle(brightness)
+    if count<generate_number():
+     # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%		       
+	brightness=(count/generate_number())*100
+	LED_red.start(50)	       
+	LED_red.ChangeDutyCycle(brightness)	       
+    # - The % brightness should be directly proportional to the % "closeness" 
     pass
 
 # Sound Buzzer
