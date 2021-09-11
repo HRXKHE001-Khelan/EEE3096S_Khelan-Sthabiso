@@ -85,8 +85,8 @@ def setup():
     Buzzer_pwm.start(50)
 
     # Setup debouncing and callbacks
-    GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback = btn_guess_pressed(btn_submit), bouncetime = 200)
-    GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback = btn_increase_pressed(btn_increase), bouncetime = 200)
+    GPIO.add_event_detect(btn_submit, GPIO.FALLING, callback = btn_guess_pressed, bouncetime = 200)
+    GPIO.add_event_detect(btn_increase, GPIO.FALLING, callback = btn_increase_pressed, bouncetime = 200)
     pass
 
 
@@ -160,8 +160,15 @@ def btn_increase_pressed(channel):
 
 # Guess button
 def btn_guess_pressed(channel):
-    # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen
+    # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen.
+		       
+    if 
+    	GPIO.cleanup()
+   	menu()
+		       
     # Compare the actual value with the user value displayed on the LEDs
+		       
+    #LED_red.start(50)		       
     # Change the PWM LED
     # if it's close enough, adjust the buzzer
     # if it's an exact guess:
