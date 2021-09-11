@@ -140,19 +140,19 @@ def btn_increase_pressed(channel):
                        
     # Increase the value shown on the LEDs
     if store[7] == 1:
-        GPIO.output(11, True)
+        GPIO.output(11, 1)
     else:  
-        GPIO.output(11, False) 
+        GPIO.output(11, 0) 
                        
     if store[6] == 1:
-        GPIO.output(13, True)
+        GPIO.output(13, 1)
     else:  
-        GPIO.output(13, False) 
+        GPIO.output(13, 0) 
                        
     if store[5] == 1:
-        GPIO.output(15, True)
+        GPIO.output(15, 1)
     else:  
-        GPIO.output(15, False)                       
+        GPIO.output(15, 0)                       
    
     # or just pull the value off the LEDs when a user makes a guess
     pass
@@ -175,9 +175,9 @@ def btn_guess_pressed(channel):
 		        sleep(0.1)
 		else:
 		        # - Disable LEDs and Buzzer
-			GPIO.output(LED_accuracy, False)       
+			GPIO.output(LED_accuracy, 0)       
 		        sleep(0.1)
-		        GPIO.output(buzzer, False)
+		        GPIO.output(buzzer, 0)
 		        slepp(0.1)
     
 		       
@@ -219,8 +219,7 @@ def trigger_buzzer():
     # The buzzer operates differently from the LED
     # While we want the brightness of the LED to change(duty cycle), we want the frequency of the buzzer to change
     # The buzzer duty cycle should be left at 50%
-    #buzzz = 0
-		       
+    #buzzz = 0	       
     # If the user is off by an absolute value of 3, the buzzer should sound once every second	       
     if abs(count-generate_number) == 3
     	Buzzer_pwm.start(50)
