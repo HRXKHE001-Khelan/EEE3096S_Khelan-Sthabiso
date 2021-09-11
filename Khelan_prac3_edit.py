@@ -81,7 +81,7 @@ def setup():
     LED_red = GPIO.PWM(LED_accuracy, 1000)
     LED_red.start(50)
 
-    Buzzer_pwm = GPIO.PWM(33, 1000)
+    Buzzer_pwm = GPIO.PWM(33, 2)
     Buzzer_pwm.start(50)
 
     # Setup debouncing and callbacks
@@ -174,6 +174,7 @@ def btn_guess_pressed(channel):
 		        trigger_buzzer()
 		        sleep(0.1)
 		else:
+		        # - Disable LEDs and Buzzer
 			GPIO.output(LED_accuracy, False)       
 		        sleep(0.1)
 		        GPIO.output(buzzer, False)
@@ -204,6 +205,7 @@ def accuracy_leds():
     	brightness =((8-count)/(8-generate_number()))*100
 	LED_red.start(50)	       
 	LED_red.ChangeDutyCycle(brightness)
+		       
     if count<generate_number():
      # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%		       
 	brightness=(count/generate_number())*100
@@ -217,9 +219,21 @@ def trigger_buzzer():
     # The buzzer operates differently from the LED
     # While we want the brightness of the LED to change(duty cycle), we want the frequency of the buzzer to change
     # The buzzer duty cycle should be left at 50%
-    # If the user is off by an absolute value of 3, the buzzer should sound once every second
+    #buzzz = 0
+		       
+    # If the user is off by an absolute value of 3, the buzzer should sound once every second	       
+    if abs(count-generate_number) == 3
+    	Buzzer_pwm.start(50)
+	Buzzer_pwm.ChangeFrequency(1)
+		       	       
     # If the user is off by an absolute value of 2, the buzzer should sound twice every second
+    if abs(count-generate_number) == 2
+	Buzzer_pwm.start(50)
+	Buzzer_pwm.ChangeFrequency(2)	       
     # If the user is off by an absolute value of 1, the buzzer should sound 4 times a second
+    if abs(count-generate_number) == 1
+	Buzzer_pwm.start(50)
+	Buzzer_pwm.ChangeFrequency(4)		       
     pass
 
 
