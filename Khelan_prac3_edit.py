@@ -12,7 +12,7 @@ LED_value = [11, 13, 15]
 LED_accuracy = 32
 btn_submit = 16
 btn_increase = 18
-buzzer = None #pin 33
+buzzer = 33 #None
 eeprom = ES2EEPROMUtils.ES2EEPROM()
 
 
@@ -161,7 +161,7 @@ def btn_increase_pressed(channel):
 # Guess button
 def btn_guess_pressed(channel):
     # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen.
-    ####################		       
+    ####################       
     	GPIO.cleanup()
    	menu()
 		       
@@ -171,15 +171,20 @@ def btn_guess_pressed(channel):
 		if count!= generate_number():
 			accuracy_leds()       
     			sleep(0.1)
+		        trigger_buzzer()
+		        sleep(0.1)
 		else:
 			GPIO.output(LED_accuracy, False)       
 		        sleep(0.1)
+		        GPIO.output(buzzer, False)
+		        slepp(0.1)
     
 		       
     #LED_red.start(50)
 		       
     # Change the PWM LED
     # if it's close enough, adjust the buzzer
+		       
     # if it's an exact guess:
     # - Disable LEDs and Buzzer
     # - tell the user and prompt them for a name
