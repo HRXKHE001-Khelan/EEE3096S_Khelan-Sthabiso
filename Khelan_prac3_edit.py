@@ -157,19 +157,19 @@ def btn_increase_pressed(channel):
         GPIO.output(LED_value[0], GPIO.LOW)
         GPIO.output(LED_value[1], GPIO.HIGH)
         GPIO.output(LED_value[2], GPIO.HIGH)
-    elif counter == 4:
+    elif guess_number == 4:
         GPIO.output(LED_value[0], GPIO.HIGH)
         GPIO.output(LED_value[1], GPIO.LOW)
         GPIO.output(LED_value[2], GPIO.LOW)
-    elif counter == 5:
+    elif guess_number == 5:
         GPIO.output(LED_value[0], GPIO.HIGH)
         GPIO.output(LED_value[1], GPIO.LOW)
         GPIO.output(LED_value[2], GPIO.HIGH)
-    elif counter == 6:
+    elif guess_number == 6:
         GPIO.output(LED_value[0], GPIO.HIGH)
         GPIO.output(LED_value[1], GPIO.HIGH)
         GPIO.output(LED_value[2], GPIO.LOW)
-    elif counter == 7:
+    elif guess_number == 7:
         GPIO.output(LED_value[0], GPIO.HIGH)
         GPIO.output(LED_value[1], GPIO.HIGH)
         GPIO.output(LED_value[2], GPIO.HIGH)
