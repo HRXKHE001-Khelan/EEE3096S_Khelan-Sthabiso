@@ -67,12 +67,18 @@ def setup():
     # Setup board mode
     GPIO.setmode(GPIO.BOARD)
 
-    #setp regular GPIO
+    #setup regular GPIO
     GPIO.setup(LED_value[0], GPIO.OUT)
     GPIO.setup(LED_value[1], GPIO.OUT)
     GPIO.setup(LED_value[2], GPIO.OUT)
     GPIO.setup(LED_accuracy, GPIO.OUT)
-    GPIO.setup(33, GPIO.OUT)
+    
+    GPIO.output(LED_value[0], GPIO.LOW)
+    GPIO.output(LED_value[1], GPIO.LOW)
+    GPIO.output(LED_value[2], GPIO.LOW)
+    GPIO.output(LED_accuracy, GPIO.LOW)
+	
+    GPIO.setup(buzzer, GPIO.OUT)
     
     GPIO.setup(btn_submit, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(btn_increase, GPIO.IN,pull_up_down = GPIO.PUD_UP)
@@ -125,35 +131,49 @@ def generate_number():
 def btn_increase_pressed(channel):
                        
 # You can choose to have a global variable store the user's current guess,                       
-    global chances
     global guess_number
     
-    if (guess_number<8):
-        store = [int(i) for i in "{0:08b}".format(guess_number)]
-                       
-    else:
-        guess_number = 0
-        store = [int(i) for i in "{0:08b}".format(guess_number)]
-                       
-    chances+ = 1
-    guess_number+ = 1 
+    if GPIO.input(btn_increase) == 0:
+    	if guess_number == 7:
+		guess_number =0
+	else:
+		guess_number+ = 1
+        	
                        
     # Increase the value shown on the LEDs
-    if store[7] == 1:
-        GPIO.output(11, 1)
-    else:  
-        GPIO.output(11, 0) 
-                       
-    if store[6] == 1:
-        GPIO.output(13, 1)
-    else:  
-        GPIO.output(13, 0) 
-                       
-    if store[5] == 1:
-        GPIO.output(15, 1)
-    else:  
-        GPIO.output(15, 0)                       
-   
+    if guess_number == 0:
+        GPIO.output(LED_value[0], GPIO.LOW)
+        GPIO.output(LED_value[1], GPIO.LOW)
+        GPIO.output(LED_value[2], GPIO.LOW)
+    elif guess_number == 1:
+        GPIO.output(LED_value[0], GPIO.LOW)
+        GPIO.output(LED_value[1], GPIO.LOW)
+        GPIO.output(LED_value[2], GPIO.HIGH)
+    elif guess_number == 2:
+        GPIO.output(LED_value[0], GPIO.LOW)
+        GPIO.output(LED_value[1], GPIO.HIGH)
+        GPIO.output(LED_value[2], GPIO.LOW)
+    elif guess_number == 3:
+        GPIO.output(LED_value[0], GPIO.LOW)
+        GPIO.output(LED_value[1], GPIO.HIGH)
+        GPIO.output(LED_value[2], GPIO.HIGH)
+    elif counter == 4:
+        GPIO.output(LED_value[0], GPIO.HIGH)
+        GPIO.output(LED_value[1], GPIO.LOW)
+        GPIO.output(LED_value[2], GPIO.LOW)
+    elif counter == 5:
+        GPIO.output(LED_value[0], GPIO.HIGH)
+        GPIO.output(LED_value[1], GPIO.LOW)
+        GPIO.output(LED_value[2], GPIO.HIGH)
+    elif counter == 6:
+        GPIO.output(LED_value[0], GPIO.HIGH)
+        GPIO.output(LED_value[1], GPIO.HIGH)
+        GPIO.output(LED_value[2], GPIO.LOW)
+    elif counter == 7:
+        GPIO.output(LED_value[0], GPIO.HIGH)
+        GPIO.output(LED_value[1], GPIO.HIGH)
+        GPIO.output(LED_value[2], GPIO.HIGH)
+    pass
     # or just pull the value off the LEDs when a user makes a guess
     pass
 
