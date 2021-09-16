@@ -188,7 +188,7 @@ def btn_guess_pressed(channel):
     # Compare the actual value with the user value displayed on the LEDs		       
     while(1):
     	if GPIO.input(btn_submit) === 0:
-		if count!= generate_number():
+		if guess_number!= generate_number():
 			accuracy_leds()       
     			sleep(0.1)
 		        trigger_buzzer()
@@ -220,15 +220,15 @@ def btn_guess_pressed(channel):
 def accuracy_leds():
     # Set the brightness of the LED based on how close the guess is to the answer
     brightness = 0
-    if count>generate_number():
+    if guess_number>generate_number():
     # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%			       
-    	brightness =((8-count)/(8-generate_number()))*100
+    	brightness =((8-guess_number)/(8-generate_number()))*100
 	LED_red.start(50)	       
 	LED_red.ChangeDutyCycle(brightness)
 		       
     if count<generate_number():
      # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%		       
-	brightness=(count/generate_number())*100
+	brightness=(guess_number/generate_number())*100
 	LED_red.start(50)	       
 	LED_red.ChangeDutyCycle(brightness)	       
     # - The % brightness should be directly proportional to the % "closeness" 
@@ -241,16 +241,16 @@ def trigger_buzzer():
     # The buzzer duty cycle should be left at 50%
     #buzzz = 0	       
     # If the user is off by an absolute value of 3, the buzzer should sound once every second	       
-    if abs(count-generate_number) == 3
+    if abs(guess_number-generate_number) == 3
     	Buzzer_pwm.start(50)
 	Buzzer_pwm.ChangeFrequency(1)
 		       	       
     # If the user is off by an absolute value of 2, the buzzer should sound twice every second
-    if abs(count-generate_number) == 2
+    if abs(guess_number-generate_number) == 2
 	Buzzer_pwm.start(50)
 	Buzzer_pwm.ChangeFrequency(2)	       
     # If the user is off by an absolute value of 1, the buzzer should sound 4 times a second
-    if abs(count-generate_number) == 1
+    if abs(guess_number-generate_number) == 1
 	Buzzer_pwm.start(50)
 	Buzzer_pwm.ChangeFrequency(4)		       
     pass
