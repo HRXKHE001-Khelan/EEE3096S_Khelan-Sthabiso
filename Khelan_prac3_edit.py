@@ -187,27 +187,30 @@ def btn_guess_pressed(channel):
 		       
     # Compare the actual value with the user value displayed on the LEDs		       
     while(1):
-    	if GPIO.input(btn_submit) === 0:
+    	if GPIO.input(btn_submit) == 0:
 		if guess_value!= generate_number():
+		        # Change the PWM LED
 			accuracy_leds()       
     			sleep(0.1)
+		        # if it's close enough, adjust the buzzer
 		        trigger_buzzer()
 		        sleep(0.1)
 		else:
+		        # if it's an exact guess:
 		        # - Disable LEDs and Buzzer
-			GPIO.output(LED_accuracy, 0)       
+			GPIO.output(LED_accuracy, LOW)       
 		        sleep(0.1)
-		        GPIO.output(buzzer, 0)
+		        GPIO.output(buzzer, LOW)
 		        slepp(0.1)
     
 		       
-    #LED_red.start(50)
+  
 		       
-    # Change the PWM LED
-    # if it's close enough, adjust the buzzer
+    
+    
 		       
-    # if it's an exact guess:
-    # - Disable LEDs and Buzzer
+   
+  
     # - tell the user and prompt them for a name
     # - fetch all the scores
     # - add the new score
