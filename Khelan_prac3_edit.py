@@ -47,6 +47,7 @@ def menu():
         print("Use the buttons on the Pi to make and submit your guess!")
         print("Press and hold the guess button to cancel your game")
         actual_value = generate_number()
+	Menu = false
         while not end_of_game:
             pass
     elif option == "Q":
@@ -136,7 +137,7 @@ def btn_increase_pressed(channel):
     
     if GPIO.input(btn_increase) == 0:
     	if guess_value == 7:
-		guess_value =0
+		guess_value = 0
 	else:
 		guess_value+ = 1
         	
