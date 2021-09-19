@@ -204,9 +204,6 @@ def btn_guess_pressed(channel):
             menu()
             break
             
-    
-    #print("Your guess was ", counter)
-    #print("The answer was ", answer)
 
      # Compare the actual value with the user value displayed on the LEDs
     if guess_value != actual_value and not Menu:
@@ -230,8 +227,8 @@ def btn_guess_pressed(channel):
         name = name.upper()
 
         while not end_of_game:
-            if len(name) < 3:
-                name = input("Name must contail at least 3 letters:\n")
+            if len(name) > 3:
+                name = input("Name must contail ONLY 3 letters:\n")
                 name = name.upper()
             else:
                 name = name[0:3]
