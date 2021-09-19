@@ -7,6 +7,7 @@ import os
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
 actual_value = 0
+guess_value = 0
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
@@ -183,61 +184,60 @@ def btn_increase_pressed(channel):
 # Guess button
 def btn_guess_pressed(channel):
     
-   
     global guess_value, actual_value, submit, Menu, GameScore, end_of_game, name
     startpressing = time.time()
     submit = True
 
-    # Return to Menu
-    while GPIO.input(btn_submit) == GPIO.LOW:
-        time.sleep(0.01)
-        length = time.time() - startpressing
+        # Return to Menu
+        while GPIO.input(btn_submit) == GPIO.LOW:
+              time.sleep(0.01)
+              length = time.time() - startpressing
 
-        # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen.
-        if length > 1:
-            Menu = True
-            off()
-            GPIO.remove_event_detect(btn_increase)
-            GPIO.remove_event_detect(btn_submit)
-            setup()
-            welcome()
-            menu()
-            break
+              # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen.
+              if length > 1:
+                 Menu = True
+                 off()
+            	 GPIO.remove_event_detect(btn_increase)
+            	 GPIO.remove_event_detect(btn_submit)
+               	 setup()
+                 welcome()
+                 menu()
+                 break
             
 
-     # Compare the actual value with the user value displayed on the LEDs
-    if guess_value != actual_value and not Menu:
-        # Change the PWM LED
-        accuracy_leds()
-	# if it's close enough, adjust the buzzer	       
-        trigger_buzzer()
-        GameScore+=1
+         # Compare the actual value with the user value displayed on the LEDs
+         if guess_value != actual_value and not Menu:
+            # Change the PWM LED
+            accuracy_leds()
+	    # if it's close enough, adjust the buzzer	       
+            trigger_buzzer()
+            GameScore+=1
 		       
-    # if it's an exact guess:	       
-    elif guess_value == actual_value and not Menu:
-	# - Disable LEDs and Buzzer	       
-        GPIO.output(LED_value[0], GPIO.LOW)
-        GPIO.output(LED_value[1], GPIO.LOW)
-        GPIO.output(LED_value[2], GPIO.LOW)
-    	GPIO.output(LED_accuracy, GPIO.LOW)
-    	GPIO.output(buzzer, GPIO.LOW)
+        # if it's an exact guess:	       
+        elif guess_value == actual_value and not Menu:
+	     # - Disable LEDs and Buzzer	       
+             GPIO.output(LED_value[0], GPIO.LOW)
+             GPIO.output(LED_value[1], GPIO.LOW)
+             GPIO.output(LED_value[2], GPIO.LOW)
+    	     GPIO.output(LED_accuracy, GPIO.LOW)
+    	     GPIO.output(buzzer, GPIO.LOW)
 		       
-        # - tell the user and prompt them for a name
-        name = input("Enter your name using only 3 letters:\n")
-        name = name.upper()
+             # - tell the user and prompt them for a name
+             name = input("Enter your name using only 3 letters:\n")
+             name = name.upper()
 
         while not end_of_game:
-            if len(name) > 3:
-                name = input("Name must contail ONLY 3 letters:\n")
-                name = name.upper()
-            else:
-                name = name[0:3]
+                  if len(name) > 3:
+                     name = input("Name must contail ONLY 3 letters:\n")
+                     name = name.upper()
+                  else
+                     name = name[0:3]
 		# - fetch all the scores
                 # - add the new score
                 # - sort the scores
                 # - Store the scores back to the EEPROM, being sure to update the score count       
-                save_scores()
-                end_of_game = True
+                     save_scores()
+                     end_of_game = True
     pass		       
 
 
