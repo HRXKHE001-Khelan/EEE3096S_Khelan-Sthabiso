@@ -6,6 +6,7 @@ import os
 
 # some global variables that need to change as we run the program
 end_of_game = None  # set if the user wins or ends the game
+actual_value = 0
 
 # DEFINE THE PINS USED HERE
 LED_value = [11, 13, 15]
@@ -32,7 +33,7 @@ def welcome():
 # Print the game menu
 def menu():
 
-    global end_of_game
+    global end_of_game, actual_value
     option = input("Select an option:   H - View High Scores     P - Play Game       Q - Quit\n")
     option = option.upper()
     if option == "H":
@@ -45,7 +46,7 @@ def menu():
         print("Starting a new round!")
         print("Use the buttons on the Pi to make and submit your guess!")
         print("Press and hold the guess button to cancel your game")
-        value = generate_number()
+        actual_value = generate_number()
         while not end_of_game:
             pass
     elif option == "Q":
@@ -180,37 +181,64 @@ def btn_increase_pressed(channel):
 
 # Guess button
 def btn_guess_pressed(channel):
-    # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen.
-    ####################       
-    	GPIO.cleanup()
-   	menu()
-		       
-    # Compare the actual value with the user value displayed on the LEDs		       
-    while(1):
-    	if GPIO.input(btn_submit) == 0:
-		if guess_value!= generate_number():
-		        # Change the PWM LED
-			accuracy_leds()       
-    			sleep(0.1)
-		        # if it's close enough, adjust the buzzer
-		        trigger_buzzer()
-		        sleep(0.1)
-		else:
-		        # if it's an exact guess:
-		        # - Disable LEDs and Buzzer
-			GPIO.output(LED_accuracy, LOW)       
-		        sleep(0.1)
-		        GPIO.output(buzzer, LOW)
-		        slepp(0.1)
     
-		       
-  
-		       
-    
-    
-		       
    
-  
+    global guess_value, actual_value, submit, Menu, GameScore, end_of_game, name
+    startpressing = time.time()
+    submit = True
+
+    # Return to Menu
+    while GPIO.input(btn_submit) == GPIO.LOW:
+        time.sleep(0.01)
+        length = time.time() - startpressing
+
+        #Checks Button Has Been Held
+        if length > 1:
+            Menu = True
+            off()
+            GPIO.remove_event_detect(btn_increase)
+            GPIO.remove_event_detect(btn_submit)
+            setup()
+            welcome()
+            menu()
+            break
+            
+    
+    #print("Your guess was ", counter)
+    #print("The answer was ", answer)
+
+    # Compare Guess to Answer
+    if guess_value != actual_value and not Menu:
+        accuracy_leds()
+        trigger_buzzer()
+        GameScore+=1
+    elif guess_value == actual_value and not Menu:
+        # if it's an exact guess:
+        # - Disable LEDs and Buzzer
+        # - tell the user and prompt them for a name
+        # - fetch all the scores
+        # - add the new score
+        # - sort the scores
+        # - Store the scores back to the EEPROM, being sure to update the score count
+        off()
+        name = input("YOURE AMAZING, enter your name:\n")
+        name = name.upper()
+
+        while not end_of_game:
+            if len(name) < 3:
+                name = input("Name must contail at least 3 letters:\n")
+                name = name.upper()
+            else:
+                name = name[0:3]
+                save_scores()
+                end_of_game = True
+    pass		       
+    # If they've pressed and held the button, clear up the GPIO and take them back to the menu screen.
+    # Compare the actual value with the user value displayed on the LEDs
+    # Change the PWM LED		       
+    # if it's close enough, adjust the buzzer
+    # if it's an exact guess:
+    # - Disable LEDs and Buzzer
     # - tell the user and prompt them for a name
     # - fetch all the scores
     # - add the new score
@@ -223,15 +251,15 @@ def btn_guess_pressed(channel):
 def accuracy_leds():
     # Set the brightness of the LED based on how close the guess is to the answer
     brightness = 0
-    if guess_value>generate_number():
+    if guess_value>actual_value():
     # - If they guessed 7, the brightness would be at ((8-7)/(8-6)*100 = 50%			       
-    	brightness =((8-guess_value)/(8-generate_number()))*100
+    	brightness =((8-guess_value)/(8-actual_value))*100
 	LED_red.start(50)	       
 	LED_red.ChangeDutyCycle(brightness)
 		       
-    if guess_value<generate_number():
+    if guess_value<actual_value:
      # - For example if the answer is 6 and a user guesses 4, the brightness should be at 4/6*100 = 66%		       
-	brightness=(guess_value/generate_number())*100
+	brightness=(guess_value/actual_value)*100
 	LED_red.start(50)	       
 	LED_red.ChangeDutyCycle(brightness)	       
     # - The % brightness should be directly proportional to the % "closeness" 
@@ -244,16 +272,16 @@ def trigger_buzzer():
     # The buzzer duty cycle should be left at 50%
     #buzzz = 0	       
     # If the user is off by an absolute value of 3, the buzzer should sound once every second	       
-    if abs(guess_valuer-generate_number) == 3
+    if abs(guess_value-actual_value) == 3
     	Buzzer_pwm.start(50)
 	Buzzer_pwm.ChangeFrequency(1)
 		       	       
     # If the user is off by an absolute value of 2, the buzzer should sound twice every second
-    if abs(guess_value-generate_number) == 2
+    if abs(guess_value-actual_value) == 2
 	Buzzer_pwm.start(50)
 	Buzzer_pwm.ChangeFrequency(2)	       
     # If the user is off by an absolute value of 1, the buzzer should sound 4 times a second
-    if abs(guess_value-generate_number) == 1
+    if abs(guess_value-actual_value) == 1
 	Buzzer_pwm.start(50)
 	Buzzer_pwm.ChangeFrequency(4)		       
     pass
