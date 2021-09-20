@@ -289,6 +289,8 @@ def btn_guess_pressed(channel):
           guesses+=1
           accuracy_leds()
           trigger_buzzer()
+    pass
+
 
 # LED Brightness
 def accuracy_leds():
