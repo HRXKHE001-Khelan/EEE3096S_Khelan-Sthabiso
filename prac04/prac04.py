@@ -5,6 +5,7 @@ import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
 import threading
 import datetime
+import time
 
 global now
 global button
@@ -14,7 +15,7 @@ T = 5
 now = datetime.datetime.now()
 
 def setup():
-    button = digitalio.DigitalInOut(board.D21)
+    button = digitalio.DigitalInOut(board.D26)
     button.switch_to_input(pull=digitalio.Pull.UP)
 
     spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
@@ -33,7 +34,8 @@ def Temp():
 
 
 def Temp_Degrees(temp):
-    temp_degrees = (temp-0.5)*100
+    temp_degrees = (temp-0.5)
+    temp_degrees = temp_degrees*100
     return temp_degrees
 
 def sample_time():
@@ -86,7 +88,7 @@ if __name__ == "__main__":
     setup()
 
     # Tell our program to run indefinitely
-    button = digitalio.DigitalInOut(board.D21)
+    button = digitalio.DigitalInOut(board.D26)
     button.switch_to_input(pull=digitalio.Pull.UP)
 
     while True:
